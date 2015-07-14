@@ -1,4 +1,4 @@
-** Trainflag isn't yet fully functional - feel free to play with what's here, but it's not yet in a state designed to be usable by end users.  Hopefully soon though! **
+_Trainflag isn't yet fully functional - feel free to play with what's here, but it's not yet in a state designed to be usable by end users.  Hopefully soon though!_
 
 # TrainFlag
 TrainFlag is a flagging and survey application designed for use in compter based training environments.  It provides a way for the trainer to be able to monitor the progress of a large number of students, and be able to see who requires help.
