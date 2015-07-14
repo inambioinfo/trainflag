@@ -1,2 +1,14 @@
-# trainflag
-A flagging and questionnaire application for use during training sessions
+** Trainflag isn't yet fully functional - feel free to play with what's here, but it's not yet in a state designed to be usable by end users.  Hopefully soon though! **
+
+# TrainFlag
+TrainFlag is a flagging and survey application designed for use in compter based training environments.  It provides a way for the trainer to be able to monitor the progress of a large number of students, and be able to see who requires help.
+
+The application comes in two parts, a server run by the trainer, and a client which is run by all of the students.  The client allows the students to let the instructor know how they're getting on, and to ask for help.
+
+From the server, the instructor can see the status of all of the students.  They can also configure a number of multi-choice surveys which they can launch at any time.  These will be displayed on the client machines, from where answers can be collated , and results obtained to allow for more interactive training.
+
+## Implementation
+TrainFlag is written in java and is therefore platform independent and will work on any system which has a java runtime environment installed.  It ideally requires that the server and clients are on the same network subnet (it can be used across subnets, but auto-discovery won't work).  The application doesn't require administrative permissions to run, and needs no additional infrastructure beyond the application distributed here.
+
+## Suggestions
+If you have any suggestions for the development of TrainFlag, please send these to simon.andrews@babraham.ac.uk.
