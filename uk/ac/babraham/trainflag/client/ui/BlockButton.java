@@ -34,6 +34,11 @@ public class BlockButton extends JPanel implements MouseListener {
 		setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 	}
 	
+	public void select () {
+		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY,5));
+	}
+
+
 	public void addActionListener (ActionListener l) {
 		listeners.add(l);
 	}

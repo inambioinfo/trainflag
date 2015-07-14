@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import uk.ac.babraham.trainflag.client.network.ClientThread;
 import uk.ac.babraham.trainflag.client.ui.BlockButton;
 import uk.ac.babraham.trainflag.resources.ColourScheme;
 import uk.ac.babraham.trainflag.server.ClientInstance;
@@ -27,6 +28,8 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 	private JTextField nameField;
 	
 	private BlockButton [] buttons = new BlockButton[4];
+	
+	private int currentState = ClientInstance.STATE_READY;
 		
 	public TrainFlagClient () {
 		//TODO: Figure out the IP of the server dynamically		
@@ -36,6 +39,8 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 			e.printStackTrace();
 		}
 		
+		// Start our own server to receive commands
+		new ClientThread(this);
 		
 		//Register ourself
 		try {
@@ -98,6 +103,36 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 		setVisible(true);
 		
 	}
+	
+	public int currentState () {
+		return currentState;
+	}
+	
+	public void setState (int newState) {
+		if (currentState == ClientInstance.STATE_HELP) return;
+		
+		if (newState == ClientInstance.STATE_READY) {
+			actionPerformed(new ActionEvent(buttons[0], 0, "ready"));
+			buttons[0].select();
+		}
+
+		else if (newState == ClientInstance.STATE_COMPLETE) {
+			actionPerformed(new ActionEvent(buttons[2], 0, "complete"));
+			buttons[2].select();
+		}
+		
+		if (newState == ClientInstance.STATE_WORKING) {
+			actionPerformed(new ActionEvent(buttons[1], 0, "working"));
+			buttons[1].select();
+		}
+
+		if (newState == ClientInstance.STATE_HELP) {
+			actionPerformed(new ActionEvent(buttons[3], 0, "help"));
+			buttons[3].select();
+		}
+
+	
+	}
 
 	public void actionPerformed(ActionEvent ae) {
 		try {
@@ -112,15 +147,19 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 			
 			if (ae.getActionCommand().equals("help")) {
 				server.sendCommand(new String [] {"CHANGE_STATE",""+ClientInstance.STATE_HELP});
+				currentState = ClientInstance.STATE_HELP;
 			}
 			else if (ae.getActionCommand().equals("finished")) {
 				server.sendCommand(new String [] {"CHANGE_STATE",""+ClientInstance.STATE_COMPLETE});
+				currentState = ClientInstance.STATE_COMPLETE;
 			}
 			else if (ae.getActionCommand().equals("ready")) {
 				server.sendCommand(new String [] {"CHANGE_STATE",""+ClientInstance.STATE_READY});
+				currentState = ClientInstance.STATE_READY;
 			}
 			else if (ae.getActionCommand().equals("working")) {
 				server.sendCommand(new String [] {"CHANGE_STATE",""+ClientInstance.STATE_WORKING});
+				currentState = ClientInstance.STATE_WORKING;
 			}
 			else {
 				throw new IllegalStateException("Unknown action "+ae.getActionCommand());

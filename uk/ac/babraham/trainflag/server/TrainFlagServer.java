@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
@@ -24,12 +27,13 @@ import uk.ac.babraham.trainflag.server.ui.SurveySetTableModel;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
-public class TrainFlagServer extends JFrame {
+public class TrainFlagServer extends JFrame implements MouseListener {
 
 	public static final String VERSION = "0.1.devel";
 	
 	private ClientSet clients = new ClientSet();
 	private SurveySet surveys = new SurveySet();
+	private JTable surveyTable;
 	private JTextField courseName;
 	
 	
@@ -65,7 +69,9 @@ public class TrainFlagServer extends JFrame {
 		JPanel surveysPanel = new JPanel();
 		surveysPanel.setLayout(new BorderLayout());
 		
-		JTable surveyTable = new JTable(new SurveySetTableModel(surveys));
+		surveyTable = new JTable(new SurveySetTableModel(surveys));
+		surveyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		surveyTable.addMouseListener(this);
 		surveyTable.setFont(new Font("Arial", Font.PLAIN, 20));
 		surveyTable.setRowHeight(30);
 		surveysPanel.add(new JScrollPane(surveyTable),BorderLayout.CENTER);
@@ -104,5 +110,22 @@ public class TrainFlagServer extends JFrame {
 	public String name () {
 		return courseName.getText();
 	}
+
+	public void mouseClicked(MouseEvent me) {
+		if (me.getSource() == surveyTable) {
+			// This comes from the survey table
+			if (me.getClickCount() == 2) {
+				new SurveyQuestionEditor(surveys.questions()[surveyTable.getSelectedRow()]);
+			}
+		}
+	}
+
+	public void mouseEntered(MouseEvent arg0) {}
+
+	public void mouseExited(MouseEvent arg0) {}
+
+	public void mousePressed(MouseEvent arg0) {}
+
+	public void mouseReleased(MouseEvent arg0) {}
 	
 }
