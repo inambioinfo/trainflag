@@ -1,0 +1,138 @@
+All communications start with a single line containing tab delimited fields.
+
+The first field in the line is a function keyword to define the action to perform.  This can optionally be followed
+by multiple extra arguments to parameterise the function.
+
+If the function requires no more data then the connection will close immediately.  If extra data is required to be
+sent then more data will be send and read until a special tag is received.  The tag to indicate the end of extended
+transport is:
+
+##END
+
+..and this text should never be included in extended data sent to the server.
+
+Below is a list of the function keywords, the initial and extended data they send, and the response expected from
+the server.
+
+
+Function: REGISTER
+
+Action: Register a new node with a server
+
+Additional fields: None
+
+Extended Data: No
+
+Expected reply: SUCCESS
+
+
+
+Function: DEREGISTER
+
+Action: Deregister a node from a server it previously registered with
+
+Additional fields: None
+
+Extended Data: No
+
+Expected reply: SUCCESS
+
+
+Function: PING
+
+Action: No action, simple test to check that server is still active
+
+Additional fields: None
+
+Extended Data: No
+
+Expected reply: SUCCESS
+
+
+
+Function: CHANGE_STATE
+
+Action: Change the readiness state of a node
+
+Additional fields: 1:	int	New state, as stored in client instance
+
+Extended data : No
+
+Expected reply: SUCCESS
+
+
+
+Function: CHANGE_NAME
+
+Action: Change the associated student name for a node
+
+Additional fields: 1:	String	The student's name
+
+Extended data : No
+
+Expected reply: SUCCESS
+
+
+
+
+Function: SEND_SURVEY
+
+Action: Send a multi choice question to present on the client
+
+Additional fields: 1 + N  First field is a random survey ID (int) to be used when replying
+                   Additional fields are the possible answers to be presented to the 
+                   client.
+
+Extended data : Yes, HTML text for the question to be rendered on the client.
+
+Expected reply: SUCCESS
+
+
+
+Function: ANSWER_SURVEY
+
+Action: Answer a previously distributed survey
+
+Additional fields: 2 fields.  Field 1 is the random survey ID (int) provided when the survey was sent.
+                              Field 2 is the answer, and is a zero based int of the index position of the selected answer
+
+Extended data : No
+
+Expected reply: SUCCESS
+
+
+
+Function: SEND_ANSWERS
+
+Action: Sends the collated answers for a survey
+
+Additional fields: 1 + 2N  First field is the survey ID (int) sent when the survey was distributed
+                           Remaining N fields are pairs of integers representing the answers to the
+                           question options presented.
+                           
+                           First number in the pair is the number of votes that answer got
+                           Second number is the status of the answer:
+                           
+                           state = 0 = This answer was neither correct nor incorrect (opinion)
+                           state = 1 = This answer was correct
+                           state = 2 = This answer was incorrect
+
+Extended data : No
+
+Expected reply: SUCCESS
+
+
+Function: CLEAR_SURVEY
+
+Action: Removes a previously displayed survey
+
+Additional fields: 1 fields.  Field 1 is the random survey ID (int) provided when the survey was sent.
+
+Extended data : No
+
+Expected reply: SUCCESS
+
+
+
+
+

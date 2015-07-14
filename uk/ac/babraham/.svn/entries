@@ -1,0 +1,38 @@
+10
+
+dir
+4
+svn+ssh://andrewss@bilin2/trainflag/trunk/uk/ac/babraham
+svn+ssh://andrewss@bilin2/trainflag
+
+
+
+2015-07-13T09:27:46.621304Z
+4
+andrewss
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+c5237ed3-f63f-46da-bea3-41d0f607269c
+
+
+
+
+
+
+0
+
+trainflag
+dir
+
