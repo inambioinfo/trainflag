@@ -13,6 +13,7 @@ public class SurveySetTableModel extends AbstractTableModel implements SurveySet
 	
 	public SurveySetTableModel (SurveySet surverySet) {
 		this.surveySet = surverySet;
+		surveySet.addSurveySetListener(this);
 	}
 	
 	public int getColumnCount() {

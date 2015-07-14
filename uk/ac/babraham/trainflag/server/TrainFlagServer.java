@@ -2,8 +2,11 @@ package uk.ac.babraham.trainflag.server;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,7 +19,9 @@ import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
 import uk.ac.babraham.trainflag.server.ui.ClientSetTableModel;
 import uk.ac.babraham.trainflag.server.ui.StatusCellRenderer;
+import uk.ac.babraham.trainflag.server.ui.SurveyQuestionEditor;
 import uk.ac.babraham.trainflag.server.ui.SurveySetTableModel;
+import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
 public class TrainFlagServer extends JFrame {
@@ -57,12 +62,31 @@ public class TrainFlagServer extends JFrame {
 		
 		tabPanel.add("Students", new JScrollPane(clientTable));
 
+		JPanel surveysPanel = new JPanel();
+		surveysPanel.setLayout(new BorderLayout());
 		
 		JTable surveyTable = new JTable(new SurveySetTableModel(surveys));
 		surveyTable.setFont(new Font("Arial", Font.PLAIN, 20));
 		surveyTable.setRowHeight(30);
+		surveysPanel.add(new JScrollPane(surveyTable),BorderLayout.CENTER);
 		
-		tabPanel.add("Surveys", new JScrollPane(surveyTable));
+		JPanel surveyButtonPanel = new JPanel();
+		JButton newSurveyButton = new JButton("Add Survey");
+		newSurveyButton.setActionCommand("new_survey");
+		newSurveyButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent ae) {
+				SurveyQuestion newQuestion = new SurveyQuestion("Why is a raven like a writing desk?");
+				new SurveyQuestionEditor(newQuestion);
+				surveys.addQuestion(newQuestion);
+			}
+		});
+		
+		surveyButtonPanel.add(newSurveyButton);
+		
+		surveysPanel.add(surveyButtonPanel,BorderLayout.SOUTH);
+		
+		tabPanel.add("Surveys", surveysPanel);
 
 		JPanel aboutContainer = new JPanel();
 		aboutContainer.setLayout(new BorderLayout());

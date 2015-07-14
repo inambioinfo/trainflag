@@ -21,6 +21,10 @@ public class SurveyQuestion {
 		return text;
 	}
 	
+	public void setText (String text) {
+		this.text = text;
+	}
+	
 	public void addAnswer (SurveyAnswer answer) {
 		answers.add(answer);
 	}
