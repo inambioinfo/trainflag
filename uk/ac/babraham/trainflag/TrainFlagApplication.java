@@ -12,6 +12,11 @@ import uk.ac.babraham.trainflag.server.TrainFlagServer;
 
 public class TrainFlagApplication extends JFrame implements ActionListener {
 
+	/**
+	 * This is the main application which is just a selector say whether 
+	 * you should run the server or the client.
+	 */
+	
 	public TrainFlagApplication () {
 		super("Welcome to TrainFlag");
 		
