@@ -65,6 +65,16 @@ public class ClientThread implements Runnable {
 					out.println("SUCCESS");
 				}
 
+				else if (commandSections[0].equals("SERVER")) {
+					// TODO: Cope with multiple servers advertising
+					// Take the address and set this as our server
+					
+					client.setServer(clientSocket.getInetAddress());
+					
+					out.println("SUCCESS");
+				}
+
+				
 				else if (commandSections[0].equals("CHANGE_STATE")) {
 
 					// We need to change our state, unless we're in HELP state

@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -32,25 +34,10 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 	private int currentState = ClientInstance.STATE_READY;
 		
 	public TrainFlagClient () {
-		//TODO: Figure out the IP of the server dynamically		
-		try {
-			server = new ServerInstaceForClient(InetAddress.getByName("127.0.0.1"));
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
 		
 		// Start our own server to receive commands
 		new ClientThread(this);
-		
-		//Register ourself
-		try {
-			server.sendCommand(new String [] {"REGISTER"});
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		
+				
 		getContentPane().setLayout(new BorderLayout());
 		
 		JPanel namePanel = new JPanel();
@@ -92,16 +79,53 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 		buttonPanel.add(helpButton);
 		buttons[3] = helpButton;
 		
-		buttons[0].mouseClicked(new MouseEvent(this, 1, 1, 0, 0, 0, 0, 0, 0, false, 0));
-
 		getContentPane().add(namePanel,BorderLayout.NORTH);
 		getContentPane().add(buttonPanel,BorderLayout.CENTER);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700,175);
 		setLocationRelativeTo(null);
-		setVisible(true);
+
+		// Now we can broadcast and see if we get anything
+		// TODO: Move this to a new thread with a timer so that we can time out
+		// and provide a manual way to enter the IP.
+
+		try {
+			DatagramSocket socket = new DatagramSocket();
+			socket.setBroadcast(true);
+
+			byte [] sendData = "PING".getBytes();
+			
+			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("255.255.255.255"),9927);
+			socket.send(sendPacket);
+			
+			socket.close();
+
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
 		
+		//		setVisible(true);
+		
+	}
+	
+	public void setServer (InetAddress address) {
+		server = new ServerInstaceForClient(address);
+		
+		//Register ourself
+		try {
+			server.sendCommand(new String [] {"REGISTER"});
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		buttons[0].mouseClicked(new MouseEvent(this, 1, 1, 0, 0, 0, 0, 0, 0, false, 0));
+
+		setVisible(true);
+
 	}
 	
 	public int currentState () {
