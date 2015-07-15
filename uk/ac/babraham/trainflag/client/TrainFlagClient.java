@@ -83,8 +83,8 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700,175);
-		setLocationRelativeTo(null);
 
+		// Don't set a start location so we start in the top left corner, which is a pretty good place to be.
 		buttons[0].mouseClicked(new MouseEvent(this, 1, 1, 0, 0, 0, 0, 0, 0, false, 0));
 		setVisible(true);
 		

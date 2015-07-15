@@ -1,6 +1,7 @@
 package uk.ac.babraham.trainflag.client;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -47,6 +48,10 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 		clientThread.addListener(this);
 		
 		serverTable = new JTable(new TrainFlagServerTableModel());
+		serverTable.setFont(new Font("Arial", Font.PLAIN, 20));
+		serverTable.setRowHeight(30);
+		serverTable.getColumnModel().getColumn(0).setPreferredWidth(200);
+		serverTable.getColumnModel().getColumn(1).setPreferredWidth(500);
 		getContentPane().setLayout(new BorderLayout());
 		serverTable.addMouseListener(this);
 		
@@ -64,30 +69,7 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 		goButton.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				InetAddress address;
-				try {
-					address = InetAddress.getByName(ipField.getText());
-				} 
-				catch (UnknownHostException e1) {
-					return;
-				}
-				
-				ServerInstaceForClient server = new ServerInstaceForClient(address);
-				
-				//Register ourself
-				try {
-					if (server.sendCommand(new String [] {"REGISTER"})) {
-						// We successfully registered, so we're done here
-						TrainFlagClient client = new TrainFlagClient(server);
-						clientThread.addListener(client);
-						clientThread.removeListener(ServerSelector.this);
-						setVisible(false);
-						dispose();
-					}
-				}
-				catch (IOException ioe) {
-					ioe.printStackTrace();
-				}				
+				selectServer();
 			}
 		});
 		
@@ -115,8 +97,37 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 
 		
 		setSize(700,300);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	private void selectServer () {
+		InetAddress address;
+		try {
+			address = InetAddress.getByName(ipField.getText());
+		} 
+		catch (UnknownHostException e1) {
+			return;
+		}
+		
+		ServerInstaceForClient server = new ServerInstaceForClient(address);
+		
+		//Register ourself
+		try {
+			if (server.sendCommand(new String [] {"REGISTER"})) {
+				// We successfully registered, so we're done here
+				TrainFlagClient client = new TrainFlagClient(server);
+				clientThread.addListener(client);
+				clientThread.removeListener(ServerSelector.this);
+				setVisible(false);
+				dispose();
+			}
+		}
+		catch (IOException ioe) {
+			ioe.printStackTrace();
+		}				
+
 	}
 	
 
@@ -164,7 +175,9 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 
 	public void changeState(int state) {}
 
-	public void mouseClicked(MouseEvent e) {}
+	public void mouseClicked(MouseEvent me) {
+		if (me.getClickCount() == 2) selectServer();
+	}
 
 	public void mouseEntered(MouseEvent e) {}
 
