@@ -15,8 +15,12 @@ import uk.ac.babraham.trainflag.server.ClientInstance;
 public class ClientThread implements Runnable {
 
 	private Vector<ClientThreadListener> listeners = new Vector<ClientThreadListener>();
+	private ServerSocket m_ServerSocket;
+	
+	public ClientThread () throws IOException {
+		
+		m_ServerSocket = new ServerSocket(9926);
 
-	public ClientThread () {
 		Thread t = new Thread(this);
 		t.start();
 	}
@@ -35,15 +39,15 @@ public class ClientThread implements Runnable {
 
 	public void run() {
 		try {
-			ServerSocket m_ServerSocket = new ServerSocket(9926);
 			while (true) {
 				Socket clientSocket = m_ServerSocket.accept();
 				ClientServiceThread cliThread = new ClientServiceThread(clientSocket);
 				cliThread.start();
-			}	
+			}
 		}
 		catch (IOException ioe) {
 			ioe.printStackTrace();
+			//TODO: Add a network error method to the listeners so they can see this
 		}
 
 	}

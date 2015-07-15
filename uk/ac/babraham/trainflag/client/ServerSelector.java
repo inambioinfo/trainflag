@@ -1,6 +1,7 @@
 package uk.ac.babraham.trainflag.client;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,9 +14,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Vector;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,6 +27,8 @@ import javax.swing.table.AbstractTableModel;
 
 import uk.ac.babraham.trainflag.client.network.ClientThread;
 import uk.ac.babraham.trainflag.client.network.ClientThreadListener;
+import uk.ac.babraham.trainflag.client.ui.BlockButton;
+import uk.ac.babraham.trainflag.resources.ColourScheme;
 
 public class ServerSelector extends JFrame implements MouseListener, ClientThreadListener {
 
@@ -44,7 +49,14 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 		super("Select your course");
 		
 		// Start a server to listen for responses
-		clientThread = new ClientThread();
+		try {
+			clientThread = new ClientThread();
+		}
+		catch (IOException ioe) {
+			// We can't start the network thread so we might as well give up now
+			JOptionPane.showMessageDialog(this, "<html>Can't start network service<br>Is TrainFlag running already?<br><br>Error:"+ioe.getLocalizedMessage()+"</html>", "Can't start", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
 		clientThread.addListener(this);
 		
 		serverTable = new JTable(new TrainFlagServerTableModel());
@@ -60,24 +72,44 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 		JPanel startClientPanel = new JPanel();
 		
 		startClientPanel.setLayout(new BorderLayout());
-		
-		startClientPanel.add(new JLabel("Use server IP"),BorderLayout.WEST);
+		startClientPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		startClientPanel.add(new JLabel("Other server IP  "),BorderLayout.WEST);
 		ipField = new JTextField();
 		startClientPanel.add(ipField, BorderLayout.CENTER);
 		
-		JButton goButton = new JButton("Start client");
+		BlockButton goButton = new BlockButton("<html><center>Start<br>TrainFlag</center></html>",ColourScheme.FINISHED_COLOUR);
+		goButton.setPreferredSize(new Dimension(150, 150));
 		goButton.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
 				selectServer();
 			}
 		});
-		
-		startClientPanel.add(goButton, BorderLayout.EAST);
+
 		getContentPane().add(startClientPanel, BorderLayout.SOUTH);
+
+		getContentPane().add(goButton, BorderLayout.EAST);
+
+		BlockButton refreshButton = new BlockButton("<html><center>Refresh<br>List</center></html>",ColourScheme.WORKING_COLOUR);
+		refreshButton.setPreferredSize(new Dimension(150, 150));
+		refreshButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sendBroadcast();
+			}
+		});
 		
+		getContentPane().add(refreshButton, BorderLayout.WEST);
 		
 		// Now we can broadcast and see if we get anything
+		sendBroadcast();
+
+		
+		setSize(800,200);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+	
+	private void sendBroadcast () {
 
 		try {
 			DatagramSocket socket = new DatagramSocket();
@@ -94,20 +126,17 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 		catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
-
-		
-		setSize(700,300);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setVisible(true);
 	}
 	
 	private void selectServer () {
+		if (ipField.getText().length()==0) return;
+		
 		InetAddress address;
 		try {
 			address = InetAddress.getByName(ipField.getText());
 		} 
 		catch (UnknownHostException e1) {
+			JOptionPane.showMessageDialog(this, "Address "+ipField.getText()+" didn't look like a real address","Can't register",JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 		
@@ -125,6 +154,7 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 			}
 		}
 		catch (IOException ioe) {
+			JOptionPane.showMessageDialog(this, "Failed to register with server: "+ioe.getLocalizedMessage(),"Can't register",JOptionPane.WARNING_MESSAGE);
 			ioe.printStackTrace();
 		}				
 
@@ -168,6 +198,19 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 
 	@Override
 	public void serverAnswered(InetAddress address, String courseName) {
+		// See if this server matches any of the ones we know about already
+		for (int s=0;s<servers.size();s++) {
+			if(servers.elementAt(s).address.equals(address)) {
+				// We know about this already
+				if (!servers.elementAt(s).courseName.equals(courseName)) {
+					servers.elementAt(s).courseName = courseName;
+					((TrainFlagServerTableModel)(serverTable.getModel())).fireTableDataChanged();					
+				}
+				return;
+			}
+		}
+		
+		// If we get here then it's a new course we've not seen before.
 		ServerInstance si = new ServerInstance(address, courseName);
 		servers.add(si);
 		((TrainFlagServerTableModel)(serverTable.getModel())).fireTableDataChanged();
