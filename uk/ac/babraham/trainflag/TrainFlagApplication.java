@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import uk.ac.babraham.trainflag.client.ServerSelector;
 import uk.ac.babraham.trainflag.client.TrainFlagClient;
 import uk.ac.babraham.trainflag.server.TrainFlagServer;
 
@@ -55,7 +56,7 @@ public class TrainFlagApplication extends JFrame implements ActionListener {
 			new TrainFlagServer();
 		}
 		else if (ae.getActionCommand().equals("client")) {
-			new TrainFlagClient();
+			new ServerSelector();
 		}
 		else {
 			throw new IllegalArgumentException("Unknown action "+ae.getActionCommand());

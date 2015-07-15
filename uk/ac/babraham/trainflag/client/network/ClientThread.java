@@ -7,18 +7,30 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Enumeration;
+import java.util.Vector;
 
-import uk.ac.babraham.trainflag.client.TrainFlagClient;
 import uk.ac.babraham.trainflag.server.ClientInstance;
 
 public class ClientThread implements Runnable {
 
-	private TrainFlagClient client;
+	private Vector<ClientThreadListener> listeners = new Vector<ClientThreadListener>();
 
-	public ClientThread (TrainFlagClient client) {
-		this.client = client;
+	public ClientThread () {
 		Thread t = new Thread(this);
 		t.start();
+	}
+	
+	public void addListener (ClientThreadListener l) {
+		if (l != null && ! listeners.contains(l)) {
+			listeners.add(l);
+		}
+	}
+	
+	public void removeListener (ClientThreadListener l) {
+		if (l != null && listeners.contains(l)) {
+			listeners.remove(l);
+		}
 	}
 
 	public void run() {
@@ -66,10 +78,10 @@ public class ClientThread implements Runnable {
 				}
 
 				else if (commandSections[0].equals("SERVER")) {
-					// TODO: Cope with multiple servers advertising
-					// Take the address and set this as our server
-					
-					client.setServer(clientSocket.getInetAddress());
+					Enumeration<ClientThreadListener> en = listeners.elements();
+					while (en.hasMoreElements()) {
+						en.nextElement().serverAnswered(clientSocket.getInetAddress(), commandSections[1]);
+					}
 					
 					out.println("SUCCESS");
 				}
@@ -86,9 +98,11 @@ public class ClientThread implements Runnable {
 							out.println("INVALID STATE "+newState);
 						}
 						else {
-							client.setState(newState);
+							Enumeration<ClientThreadListener> en = listeners.elements();
+							while (en.hasMoreElements()) {
+								en.nextElement().changeState(newState);
+							}
 							out.println("SUCCESS");
-
 						}
 					}
 					catch (NumberFormatException nfe) {

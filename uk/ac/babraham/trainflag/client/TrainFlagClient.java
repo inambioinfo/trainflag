@@ -8,10 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -19,12 +16,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import uk.ac.babraham.trainflag.client.network.ClientThread;
+import uk.ac.babraham.trainflag.client.network.ClientThreadListener;
 import uk.ac.babraham.trainflag.client.ui.BlockButton;
 import uk.ac.babraham.trainflag.resources.ColourScheme;
 import uk.ac.babraham.trainflag.server.ClientInstance;
 
-public class TrainFlagClient extends JFrame implements ActionListener, KeyListener {
+public class TrainFlagClient extends JFrame implements ActionListener, KeyListener, ClientThreadListener {
 
 	private ServerInstaceForClient server;
 	private JTextField nameField;
@@ -33,11 +30,13 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 	
 	private int currentState = ClientInstance.STATE_READY;
 		
-	public TrainFlagClient () {
+	public TrainFlagClient (ServerInstaceForClient server) {
 		
-		// Start our own server to receive commands
-		new ClientThread(this);
-				
+		this.server = server;
+		
+		// This object will already have been registered with the ClientThread by
+		// the server selector so we don't need to do that here.
+		
 		getContentPane().setLayout(new BorderLayout());
 		
 		JPanel namePanel = new JPanel();
@@ -86,77 +85,15 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 		setSize(700,175);
 		setLocationRelativeTo(null);
 
-		// Now we can broadcast and see if we get anything
-		// TODO: Move this to a new thread with a timer so that we can time out
-		// and provide a manual way to enter the IP.
-
-		try {
-			DatagramSocket socket = new DatagramSocket();
-			socket.setBroadcast(true);
-
-			byte [] sendData = "PING".getBytes();
-			
-			DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, InetAddress.getByName("255.255.255.255"),9927);
-			socket.send(sendPacket);
-			
-			socket.close();
-
-		}
-		catch (IOException ioe) {
-			ioe.printStackTrace();
-		}
-
-		
-		//		setVisible(true);
-		
-	}
-	
-	public void setServer (InetAddress address) {
-		server = new ServerInstaceForClient(address);
-		
-		//Register ourself
-		try {
-			server.sendCommand(new String [] {"REGISTER"});
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
-		
 		buttons[0].mouseClicked(new MouseEvent(this, 1, 1, 0, 0, 0, 0, 0, 0, false, 0));
-
 		setVisible(true);
-
+		
 	}
-	
+		
 	public int currentState () {
 		return currentState;
 	}
 	
-	public void setState (int newState) {
-		if (currentState == ClientInstance.STATE_HELP) return;
-		
-		if (newState == ClientInstance.STATE_READY) {
-			actionPerformed(new ActionEvent(buttons[0], 0, "ready"));
-			buttons[0].select();
-		}
-
-		else if (newState == ClientInstance.STATE_COMPLETE) {
-			actionPerformed(new ActionEvent(buttons[2], 0, "complete"));
-			buttons[2].select();
-		}
-		
-		if (newState == ClientInstance.STATE_WORKING) {
-			actionPerformed(new ActionEvent(buttons[1], 0, "working"));
-			buttons[1].select();
-		}
-
-		if (newState == ClientInstance.STATE_HELP) {
-			actionPerformed(new ActionEvent(buttons[3], 0, "help"));
-			buttons[3].select();
-		}
-
-	
-	}
 
 	public void actionPerformed(ActionEvent ae) {
 		try {
@@ -207,6 +144,34 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 	}
 
 	public void keyTyped(KeyEvent ke) {}
+
+	public void serverAnswered(InetAddress address, String courseName) {}
+
+	public void changeState(int newState) {
+		if (currentState == ClientInstance.STATE_HELP) return;
+		
+		if (newState == ClientInstance.STATE_READY) {
+			actionPerformed(new ActionEvent(buttons[0], 0, "ready"));
+			buttons[0].select();
+		}
+
+		else if (newState == ClientInstance.STATE_COMPLETE) {
+			actionPerformed(new ActionEvent(buttons[2], 0, "complete"));
+			buttons[2].select();
+		}
+		
+		if (newState == ClientInstance.STATE_WORKING) {
+			actionPerformed(new ActionEvent(buttons[1], 0, "working"));
+			buttons[1].select();
+		}
+
+		if (newState == ClientInstance.STATE_HELP) {
+			actionPerformed(new ActionEvent(buttons[3], 0, "help"));
+			buttons[3].select();
+		}
+
+	
+	}
 
 	
 	
