@@ -54,7 +54,7 @@ public class ServerSelector extends JFrame implements MouseListener, ClientThrea
 		}
 		catch (IOException ioe) {
 			// We can't start the network thread so we might as well give up now
-			JOptionPane.showMessageDialog(this, "<html>Can't start network service<br>Is TrainFlag running already?<br><br>Error:"+ioe.getLocalizedMessage()+"</html>", "Can't start", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "<html>Can't start the network service<br>Is TrainFlag running already?<br><br>Error:"+ioe.getLocalizedMessage()+"</html>", "Can't start", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
 		clientThread.addListener(this);

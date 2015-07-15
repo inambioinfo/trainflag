@@ -14,16 +14,19 @@ import uk.ac.babraham.trainflag.server.ClientSet;
 public class ServerThread implements Runnable {
 
 	private ClientSet clients;
+	private ServerSocket m_ServerSocket;
 	
-	public ServerThread (ClientSet clients) {
+	public ServerThread (ClientSet clients) throws IOException {
 		this.clients = clients;
+		
+		m_ServerSocket = new ServerSocket(9925);
+		
 		Thread t = new Thread(this);
 		t.start();
 	}
 
 	public void run() {
 		try {
-			ServerSocket m_ServerSocket = new ServerSocket(9925);
 			while (true) {
 				Socket clientSocket = m_ServerSocket.accept();
 				ClientServiceThread cliThread = new ClientServiceThread(clientSocket);

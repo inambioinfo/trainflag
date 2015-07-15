@@ -6,11 +6,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -43,7 +45,15 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 
 		// Create the server thread which is going to do the processing of
 		// incoming connections
-		new ServerThread(clients);
+		try {
+			new ServerThread(clients);
+		}
+		catch (IOException ioe) {
+			// We can't start the network thread so we might as well give up now
+			JOptionPane.showMessageDialog(this, "<html>Can't start the network service<br>Is TrainFlag server running already?<br><br>Error:"+ioe.getLocalizedMessage()+"</html>", "Can't start", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+
+		}
 
 		getContentPane().setLayout(new BorderLayout());
 
