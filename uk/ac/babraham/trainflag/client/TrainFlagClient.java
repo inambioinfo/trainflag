@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 
@@ -33,8 +35,19 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 	public TrainFlagClient (ServerInstaceForClient server) {
 		
 		super("TrainFlag");
-		
 		this.server = server;
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				try {
+					TrainFlagClient.this.server.sendCommand(new String [] {"DEREGISTER"});
+				} 
+				catch (IOException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		
 		
 		// This object will already have been registered with the ClientThread by
 		// the server selector so we don't need to do that here.
