@@ -32,6 +32,8 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 		
 	public TrainFlagClient (ServerInstaceForClient server) {
 		
+		super("TrainFlag");
+		
 		this.server = server;
 		
 		// This object will already have been registered with the ClientThread by
