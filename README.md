@@ -1,7 +1,7 @@
 _Whilst TrainFlag hasn't had a full release yet, it is now functional, so if you want to compile the sources and have a play, feel free_
 
 # TrainFlag
-TrainFlag is a flagging and survey application designed for use in compter based training environments.  It provides a way for the trainer to be able to monitor the progress of a large number of students, and be able to see who requires help.
+TrainFlag is a flagging and survey application designed for use in computer based training environments.  It provides a way for the trainer to be able to monitor the progress of a large number of students, and be able to see who requires help.
 
 ![TrainFlag Client](/images/trainflag_client.png)
 
