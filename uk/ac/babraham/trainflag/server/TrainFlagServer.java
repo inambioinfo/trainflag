@@ -24,6 +24,7 @@ import uk.ac.babraham.trainflag.server.network.BroadcastReceiver;
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
 import uk.ac.babraham.trainflag.server.ui.ClientSetTableModel;
+import uk.ac.babraham.trainflag.server.ui.RoomPanel;
 import uk.ac.babraham.trainflag.server.ui.StatusCellRenderer;
 import uk.ac.babraham.trainflag.server.ui.SurveyQuestionEditor;
 import uk.ac.babraham.trainflag.server.ui.SurveySetTableModel;
@@ -110,6 +111,9 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 		aboutContainer.add(new AboutPanel(),BorderLayout.CENTER);
 		tabPanel.add("About", aboutContainer);
 
+		
+		tabPanel.add("Layout",new RoomPanel(clients));
+		
 		getContentPane().add(tabPanel,BorderLayout.CENTER);
 
 

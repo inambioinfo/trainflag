@@ -21,8 +21,10 @@ public class ClientInstance {
 	
 	private String studentName = "Not known";
 	private InetAddress ipAddress;
-	private int port;
 	private int currentState = STATE_READY;
+	
+	private float xPosition = 0;
+	private float yPosition = 0;
 	
 	
 	public ClientInstance (InetAddress ipAddress) {
@@ -36,6 +38,30 @@ public class ClientInstance {
 		return false;
 	}
 	
+	/**
+	 * Provide a relative position for this client within the room.  The x and
+	 * y positions are relative positions on a scale of 0 to 1.
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	public void setPosition (float x, float y) {
+		if (x<0) x=0;
+		if (x>1) x=1;
+		if (y<0) y=0;
+		if (y>1) y=1;
+		
+		xPosition = x;
+		yPosition = y;
+	}
+	
+	public float x () {
+		return xPosition;
+	}
+	
+	public float y () {
+		return yPosition;
+	}
 	
 	public int state () {
 		return currentState;
