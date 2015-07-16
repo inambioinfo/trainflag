@@ -2,6 +2,9 @@ package uk.ac.babraham.trainflag.server.ui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JPanel;
 
@@ -10,7 +13,7 @@ import uk.ac.babraham.trainflag.server.ClientInstance;
 import uk.ac.babraham.trainflag.server.ClientSet;
 import uk.ac.babraham.trainflag.server.ClientSetListener;;
 
-public class RoomPanel extends JPanel implements ClientSetListener {
+public class RoomPanel extends JPanel implements ClientSetListener, MouseListener, MouseMotionListener {
 
 	private ClientSet clients;
 	
@@ -19,9 +22,13 @@ public class RoomPanel extends JPanel implements ClientSetListener {
 	// based on the number of clients we have.
 	private int iconSize = 30;
 	
+	private ClientInstance selectedClient = null;
+	
 	public RoomPanel (ClientSet clients) {
 		this.clients = clients;
 		clients.addClientSetListener(this);
+		addMouseListener(this);
+		addMouseMotionListener(this);
 	}
 	
 	public void paint (Graphics g) {
@@ -52,9 +59,24 @@ public class RoomPanel extends JPanel implements ClientSetListener {
 		g.setColor(Color.BLACK);
 
 		g.drawRect(x-(iconSize/2), y-(iconSize/2), iconSize, iconSize);
-
 		
+		String name = client.studentName();
+		g.drawString(name, x-(g.getFontMetrics().stringWidth(name)/2), y+iconSize);
+	}
+	
+	private ClientInstance findClientAtPosition (int x, int y) {
 		
+		ClientInstance [] allClients = clients.clients();
+		
+		for (int c=0;c<allClients.length;c++) {
+			int cx = getX(allClients[c].x());
+			int cy = getY(allClients[c].y());
+			
+			if (Math.sqrt(Math.pow(cx-x, 2)+Math.pow(cy-y,2))< iconSize) {
+				return allClients[c];
+			}
+		}
+		return null;
 	}
 	
 	private int getX (float proportion) {
@@ -70,7 +92,33 @@ public class RoomPanel extends JPanel implements ClientSetListener {
 		y += iconSize;
 		return y;
 	}
+	
+	private float getXProportion (int x) {
+		float usableWidth = getWidth()-(iconSize*2);
 
+		x -= iconSize;
+		
+		float proportion = x/usableWidth;
+
+		if (proportion<0) proportion=0;
+		if (proportion>100) proportion=100;
+		
+		return proportion;
+	}
+
+	private float getYProportion (int y) {
+		float usableHeight = getHeight()-(iconSize*2);
+
+		y -= iconSize;
+		
+		float proportion = y/usableHeight;
+		if (proportion<0) proportion=0;
+		if (proportion>100) proportion=100;
+		
+		return proportion;
+	}
+
+	
 	
 	
 	public void clientAdded(ClientInstance client) {
@@ -87,6 +135,47 @@ public class RoomPanel extends JPanel implements ClientSetListener {
 
 	public void clientNameChanged(ClientInstance client, String name) {
 		repaint();
+	}
+
+	public void mouseDragged(MouseEvent me) {
+
+		if (selectedClient != null) {
+			selectedClient.setPosition(getXProportion(me.getX()), getYProportion(me.getY()));
+			repaint();
+		}
+		
+	}
+
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mousePressed(MouseEvent me) {
+		// See if we're within a drawn client to select it
+		selectedClient = findClientAtPosition(me.getX(), me.getY());
+		repaint();
+		
+	}
+
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	
