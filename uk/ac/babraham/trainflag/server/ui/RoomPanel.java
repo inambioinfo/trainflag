@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import javax.swing.JPanel;
 
@@ -16,7 +18,8 @@ import uk.ac.babraham.trainflag.server.ClientSetListener;;
 public class RoomPanel extends JPanel implements ClientSetListener, MouseListener, MouseMotionListener {
 
 	private ClientSet clients;
-	
+	private TrainerInstance trainer;
+		
 	// This is going to be the size of the icons we're using.  It will also be
 	// used to set the border around the room.  Later on we may set this dynamically
 	// based on the number of clients we have.
@@ -29,6 +32,13 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		clients.addClientSetListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		try {
+			trainer = new TrainerInstance();
+		} 
+		catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void paint (Graphics g) {
@@ -46,13 +56,20 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 			drawClient(g,allClients[c]);
 		}
 		
+		drawClient(g, trainer);
+		
 	}
 	
 	private void drawClient (Graphics g, ClientInstance client) {
 		int x = getX(client.x());
 		int y = getY(client.y());
 		
-		g.setColor(ColourScheme.getColourForState(client.state()));
+		if (client == trainer) {
+			g.setColor(Color.GRAY);
+		}
+		else {
+			g.setColor(ColourScheme.getColourForState(client.state()));
+		}
 		
 		g.fillRect(x-(iconSize/2), y-(iconSize/2), iconSize, iconSize);
 
@@ -62,11 +79,20 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		
 		String name = client.studentName();
 		g.drawString(name, x-(g.getFontMetrics().stringWidth(name)/2), y+iconSize);
+		
+		name = client.hostname();
+		g.drawString(name, x-(g.getFontMetrics().stringWidth(name)/2), y+iconSize+g.getFontMetrics().getAscent());
 	}
 	
 	private ClientInstance findClientAtPosition (int x, int y) {
 		
-		ClientInstance [] allClients = clients.clients();
+		ClientInstance [] actualClients = clients.clients();
+		
+		ClientInstance [] allClients = new ClientInstance [actualClients.length+1];
+		for (int i=0;i<actualClients.length;i++) {
+			allClients[i] = actualClients[i];
+		}
+		allClients[allClients.length-1] = trainer;
 		
 		for (int c=0;c<allClients.length;c++) {
 			int cx = getX(allClients[c].x());
@@ -178,6 +204,21 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		
 	}
 	
+	private class TrainerInstance extends ClientInstance {
+		
+		public TrainerInstance () throws UnknownHostException  {
+			super(InetAddress.getLocalHost());
+			setPosition(0.5f, 0);
+		}
+		
+		public String studentName () {
+			return "Trainer";
+		}
+		
+		public String hostname () {
+			return "";
+		}
+	}
 	
 	
 

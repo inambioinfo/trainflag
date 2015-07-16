@@ -32,14 +32,8 @@ public class ClientSetTableModel extends AbstractTableModel implements ClientSet
 	}
 
 	public Object getValueAt(int row, int col) {
-		if (col == 0) {
-			String name = clients.clients()[row].address().getHostName();
-			String ip = clients.clients()[row].address().getHostAddress();
-			if (name.equals(ip)) {
-				return ip;
-			}
-			return name+" ("+ip+")";
-		}
+		if (col == 0) return clients.clients()[row].hostname();
+		
 		if (col == 1) {
 			return clients.clients()[row].studentName();
 		}

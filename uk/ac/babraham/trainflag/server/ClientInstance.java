@@ -25,7 +25,7 @@ public class ClientInstance {
 	
 	private float xPosition = 0;
 	private float yPosition = 0;
-	
+		
 	
 	public ClientInstance (InetAddress ipAddress) {
 		this.ipAddress = ipAddress;
@@ -76,6 +76,18 @@ public class ClientInstance {
 	
 	public InetAddress address () {
 		return ipAddress;
+	}
+	
+	public String hostname () {
+		String hostname = address().getHostName();
+		if (hostname.equals(address().getHostAddress())) {
+			return hostname;
+		}
+		
+		String [] sections = hostname.split("\\.");
+		
+		return sections[0];
+
 	}
 	
 	protected void setStudentName (String studentName) {
