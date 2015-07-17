@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server.ui;
+package uk.ac.babraham.trainflag.server.ui.roomPanel;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -19,6 +19,8 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 
 	private ClientSet clients;
 	private TrainerInstance trainer;
+	
+	private ClientInstanceSpace [] spaces = new ClientInstanceSpace [0];
 		
 	// This is going to be the size of the icons we're using.  It will also be
 	// used to set the border around the room.  Later on we may set this dynamically

@@ -24,10 +24,11 @@ import uk.ac.babraham.trainflag.server.network.BroadcastReceiver;
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
 import uk.ac.babraham.trainflag.server.ui.ClientSetTableModel;
-import uk.ac.babraham.trainflag.server.ui.RoomPanel;
 import uk.ac.babraham.trainflag.server.ui.StatusCellRenderer;
 import uk.ac.babraham.trainflag.server.ui.SurveyQuestionEditor;
 import uk.ac.babraham.trainflag.server.ui.SurveySetTableModel;
+import uk.ac.babraham.trainflag.server.ui.roomPanel.RoomPanel;
+import uk.ac.babraham.trainflag.server.ui.roomPanel.RoomPanelContainer;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
@@ -106,16 +107,15 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 
 		tabPanel.add("Surveys", surveysPanel);
 
+		tabPanel.add("Layout",new RoomPanelContainer(clients));
+				
 		JPanel aboutContainer = new JPanel();
 		aboutContainer.setLayout(new BorderLayout());
 		aboutContainer.add(new AboutPanel(),BorderLayout.CENTER);
 		tabPanel.add("About", aboutContainer);
 
-		
-		tabPanel.add("Layout",new RoomPanel(clients));
-		
 		getContentPane().add(tabPanel,BorderLayout.CENTER);
-
+	
 
 		// Create the broadcast received which will trigger and advertisement
 		// of the service to any clients who ping us
