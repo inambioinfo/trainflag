@@ -43,6 +43,23 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		}
 	}
 	
+	public void setClientInstanceSpaces (ClientInstanceSpace [] spaces) {
+		this.spaces = spaces;
+		
+		// Go through the existing clients, moving them to the spaces if there
+		// are any
+		ClientInstance [] clients = this.clients.clients();
+		for (int c=0;c<clients.length;c++) {
+			for (int i=0;i<spaces.length;i++) {
+				if (spaces[i].address().equals(clients[c].address())) {
+					clients[c].setPosition(spaces[i].x(), spaces[i].y());
+				}
+			}
+		}
+		
+		repaint();
+	}
+	
 	public void paint (Graphics g) {
 		super.paint(g);
 		
@@ -58,6 +75,16 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 			drawClient(g,allClients[c]);
 		}
 		
+		// Draw the spaces, unless the corresponding client is already there
+		for (int c=0;c<spaces.length;c++) {
+			for (int i=0;i<allClients.length;i++) {
+				if (allClients[i].address().equals(spaces[c].address())) {
+					continue;
+				}
+			}
+			drawClient(g, spaces[c]);
+		}
+		
 		drawClient(g, trainer);
 		
 	}
@@ -68,6 +95,9 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		
 		if (client == trainer) {
 			g.setColor(Color.GRAY);
+		}
+		else if (client instanceof ClientInstanceSpace) {
+			g.setColor(Color.WHITE);
 		}
 		else {
 			g.setColor(ColourScheme.getColourForState(client.state()));
@@ -146,10 +176,15 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		return proportion;
 	}
 
-	
-	
-	
 	public void clientAdded(ClientInstance client) {
+		// See if this client matches any of the room spaces, and move it
+		// if it does
+		for (int i=0;i<spaces.length;i++) {
+			if (spaces[i].address().equals(client.address())) {
+				client.setPosition(spaces[i].x(), spaces[i].y());
+				break;
+			}
+		}
 		repaint();
 	}
 

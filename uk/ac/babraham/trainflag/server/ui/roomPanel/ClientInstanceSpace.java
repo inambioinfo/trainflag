@@ -6,8 +6,9 @@ import uk.ac.babraham.trainflag.server.ClientInstance;
 
 public class ClientInstanceSpace extends ClientInstance {
 
-	public ClientInstanceSpace(InetAddress ipAddress) {
+	public ClientInstanceSpace(InetAddress ipAddress, float x, float y) {
 		super(ipAddress);
+		setPosition(x, y);
 	}
 
 }
