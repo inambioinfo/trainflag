@@ -110,9 +110,20 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		g.drawRect(x-(iconSize/2), y-(iconSize/2), iconSize, iconSize);
 		
 		String name = client.studentName();
+		if (client instanceof ClientInstanceSpace) {
+			name = client.address().getHostName();
+		}
 		g.drawString(name, x-(g.getFontMetrics().stringWidth(name)/2), y+iconSize);
 		
 		name = client.hostname();
+		if (client instanceof ClientInstanceSpace) {
+			if (client.address().getHostName().equals(client.address().getHostAddress())) {
+				name = "";
+			}
+			else {
+				name = client.address().getHostAddress();
+			}
+		}
 		g.drawString(name, x-(g.getFontMetrics().stringWidth(name)/2), y+iconSize+g.getFontMetrics().getAscent());
 	}
 	

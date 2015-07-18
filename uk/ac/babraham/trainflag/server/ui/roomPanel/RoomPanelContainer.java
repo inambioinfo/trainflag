@@ -3,12 +3,15 @@ package uk.ac.babraham.trainflag.server.ui.roomPanel;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -50,36 +53,77 @@ public class RoomPanelContainer extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 
 		if (ae.getActionCommand().equals("load")) {
-			// TODO: Actually load something
 
 			try {
-				ClientInstanceSpace [] spaces = new ClientInstanceSpace [] {
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.6")),0,0.25f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.7")),0.25f,0.25f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.8")),0.5f,0.25f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.9")),0.75f,0.25f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.10")),1,0.25f),
-						new ClientInstanceSpace(InetAddress.getByAddress("bi1274m",IPtoByteConverter.asBytes("149.155.148.11")),0,0.5f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.12")),0.25f,0.5f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.13")),0.75f,0.5f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.14")),1,0.5f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.15")),0,0.75f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.16")),0.25f,0.75f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.17")),0.5f,0.75f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.18")),0.75f,0.75f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.19")),1,0.75f),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.1")),0,1),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.2")),0.25f,1),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.3")),0.5f,1),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.4")),0.75f,1),
-						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.5")),1,1)
-				};
+//				ClientInstanceSpace [] spaces = new ClientInstanceSpace [] {
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.6")),0,0.25f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.7")),0.25f,0.25f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.8")),0.5f,0.25f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.9")),0.75f,0.25f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.10")),1,0.25f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("bi1274m",IPtoByteConverter.asBytes("149.155.148.11")),0,0.5f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.12")),0.25f,0.5f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.13")),0.75f,0.5f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.14")),1,0.5f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.15")),0,0.75f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.16")),0.25f,0.75f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.17")),0.5f,0.75f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.18")),0.75f,0.75f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.19")),1,0.75f),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.1")),0,1),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.2")),0.25f,1),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.3")),0.5f,1),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.4")),0.75f,1),
+//						new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.5")),1,1)
+//				};
 
-				roomPanel.setClientInstanceSpaces(spaces);
+				JFileChooser chooser = new JFileChooser();
+				chooser.setMultiSelectionEnabled(false);
+				chooser.setFileFilter(new FileFilter() {
+				
+					public String getDescription() {
+						return "TrainFlag Room Layout Files";
+					}
+				
+					public boolean accept(File f) {
+						if (f.isDirectory() || f.getName().toLowerCase().endsWith(".tfr")) {
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+				
+				});
+				
+				int result = chooser.showOpenDialog(this);
+				if (result == JFileChooser.CANCEL_OPTION) return;
+
+				File file = chooser.getSelectedFile();
+
+				
+				Vector<ClientInstanceSpace> newClients = new Vector<ClientInstanceSpace>();
+				
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				
+				String line;
+				while ((line = br.readLine()) != null) {
+					String [] sections = line.split("\t",-1);
+			
+					ClientInstanceSpace space = new ClientInstanceSpace(InetAddress.getByAddress(sections[1],IPtoByteConverter.asBytes(sections[0])),Float.parseFloat(sections[2]), Float.parseFloat(sections[3]));
+					newClients.add(space);
+				}
+				
+				br.close();
+				roomPanel.setClientInstanceSpaces(newClients.toArray(new ClientInstanceSpace[0]));
 
 			}
 			catch (UnknownHostException he) {
 				he.printStackTrace();
+			}
+			catch (IOException ioe) {
+				ioe.printStackTrace();
+				JOptionPane.showMessageDialog(this, "Error loading file: "+ioe.getMessage(), "Load error", JOptionPane.ERROR_MESSAGE);
 			}
 
 		}
