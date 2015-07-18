@@ -49,7 +49,7 @@ public class RoomPanelContainer extends JPanel implements ActionListener {
 					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.8")),0.5f,0.25f),
 					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.9")),0.75f,0.25f),
 					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.10")),1,0.25f),
-					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.11")),0,0.5f),
+					new ClientInstanceSpace(InetAddress.getByAddress("bi1274m",IPtoByteConverter.asBytes("149.155.148.11")),0,0.5f),
 					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.12")),0.25f,0.5f),
 					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.13")),0.75f,0.5f),
 					new ClientInstanceSpace(InetAddress.getByAddress("Space",IPtoByteConverter.asBytes("149.155.148.14")),1,0.5f),

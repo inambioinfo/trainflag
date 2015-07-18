@@ -38,6 +38,24 @@ public class ClientInstance {
 		return false;
 	}
 	
+	public boolean matchesAddress (InetAddress address) {
+		
+		/** 
+		 * This is a more lose matching than the standard 'equals'.  A match on either
+		 * IP address, or hostname is enough to pass.
+		 */
+		
+		if (ipAddress.equals(address)) return true;
+		
+		// We can also make a less specific check for either the ip 
+		// address or the hostname being the same.
+		
+		if (ipAddress.getHostAddress().equals(address.getHostAddress())) return true;
+		if (ipAddress.getHostName().equals(address.getHostName())) return true;
+		
+		return false;
+	}
+	
 	/**
 	 * Provide a relative position for this client within the room.  The x and
 	 * y positions are relative positions on a scale of 0 to 1.

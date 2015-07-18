@@ -73,11 +73,7 @@ public class ServerThread implements Runnable {
 					if (!clients.hasClient(ci.address())) {
 						clients.addClient(ci);
 					}
-					
-					// Set a default random position for this client.
-					// TODO: Do this better...
-					ci.setPosition((float)Math.random(), (float)Math.random());
-					
+										
 					out.println("SUCCESS");
 				}
 								

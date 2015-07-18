@@ -51,7 +51,7 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		ClientInstance [] clients = this.clients.clients();
 		for (int c=0;c<clients.length;c++) {
 			for (int i=0;i<spaces.length;i++) {
-				if (spaces[i].address().equals(clients[c].address())) {
+				if (spaces[i].matchesAddress(clients[c].address())) {
 					clients[c].setPosition(spaces[i].x(), spaces[i].y());
 				}
 			}
@@ -76,10 +76,10 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		}
 		
 		// Draw the spaces, unless the corresponding client is already there
-		for (int c=0;c<spaces.length;c++) {
+		SPACES: for (int c=0;c<spaces.length;c++) {
 			for (int i=0;i<allClients.length;i++) {
-				if (allClients[i].address().equals(spaces[c].address())) {
-					continue;
+				if (allClients[i].matchesAddress(spaces[c].address())) {
+					continue SPACES;
 				}
 			}
 			drawClient(g, spaces[c]);
@@ -180,11 +180,13 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		// See if this client matches any of the room spaces, and move it
 		// if it does
 		for (int i=0;i<spaces.length;i++) {
-			if (spaces[i].address().equals(client.address())) {
+			if (spaces[i].matchesAddress(client.address())) {
 				client.setPosition(spaces[i].x(), spaces[i].y());
+				repaint();
 				break;
 			}
 		}
+		System.err.println("No match found for new client");
 		repaint();
 	}
 
