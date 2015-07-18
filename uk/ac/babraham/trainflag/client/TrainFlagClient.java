@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,6 +36,8 @@ public class TrainFlagClient extends JFrame implements ActionListener, KeyListen
 	public TrainFlagClient (ServerInstaceForClient server) {
 		
 		super("TrainFlag");
+		setIconImage(new ImageIcon(ClassLoader.getSystemResource("images/trainflag_logo.png")).getImage());
+
 		this.server = server;
 		
 		addWindowListener(new WindowAdapter() {

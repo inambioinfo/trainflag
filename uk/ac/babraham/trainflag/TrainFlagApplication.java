@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -20,7 +21,8 @@ public class TrainFlagApplication extends JFrame implements ActionListener {
 	
 	public TrainFlagApplication () {
 		super("Welcome to TrainFlag");
-		
+		setIconImage(new ImageIcon(ClassLoader.getSystemResource("images/trainflag_logo.png")).getImage());
+
 		getContentPane().setLayout(new GridLayout(1, 2));
 		
 		JButton serverButton = new JButton("Start Server");

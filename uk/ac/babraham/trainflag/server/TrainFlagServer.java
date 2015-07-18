@@ -9,6 +9,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -43,6 +44,8 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 
 	public TrainFlagServer () {
 		super("Train Flag Server");
+		setIconImage(new ImageIcon(ClassLoader.getSystemResource("images/trainflag_logo.png")).getImage());
+
 
 		// Create the server thread which is going to do the processing of
 		// incoming connections
