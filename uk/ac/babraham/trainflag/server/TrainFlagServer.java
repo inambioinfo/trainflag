@@ -23,12 +23,11 @@ import javax.swing.ListSelectionModel;
 import uk.ac.babraham.trainflag.server.network.BroadcastReceiver;
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
-import uk.ac.babraham.trainflag.server.ui.ClientSetTableModel;
-import uk.ac.babraham.trainflag.server.ui.StatusCellRenderer;
-import uk.ac.babraham.trainflag.server.ui.SurveyQuestionEditor;
-import uk.ac.babraham.trainflag.server.ui.SurveySetTableModel;
-import uk.ac.babraham.trainflag.server.ui.roomPanel.RoomPanel;
-import uk.ac.babraham.trainflag.server.ui.roomPanel.RoomPanelContainer;
+import uk.ac.babraham.trainflag.server.ui.RoomPanel.RoomPanelContainer;
+import uk.ac.babraham.trainflag.server.ui.StatusPanel.ClientSetTableModel;
+import uk.ac.babraham.trainflag.server.ui.StatusPanel.StatusCellRenderer;
+import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveyQuestionEditor;
+import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveySetTableModel;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 

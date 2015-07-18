@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server.ui.roomPanel;
+package uk.ac.babraham.trainflag.server.ui.RoomPanel;
 
 import java.net.InetAddress;
 

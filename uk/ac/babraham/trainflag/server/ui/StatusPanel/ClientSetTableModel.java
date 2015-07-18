@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server.ui;
+package uk.ac.babraham.trainflag.server.ui.StatusPanel;
 
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;

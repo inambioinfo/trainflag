@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server.ui.roomPanel;
+package uk.ac.babraham.trainflag.server.ui.RoomPanel;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
