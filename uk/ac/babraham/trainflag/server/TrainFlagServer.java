@@ -24,9 +24,8 @@ import javax.swing.ListSelectionModel;
 import uk.ac.babraham.trainflag.server.network.BroadcastReceiver;
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
+import uk.ac.babraham.trainflag.server.ui.ClientSetPanel.ClientSetPanel;
 import uk.ac.babraham.trainflag.server.ui.RoomPanel.RoomPanelContainer;
-import uk.ac.babraham.trainflag.server.ui.StatusPanel.ClientSetTableModel;
-import uk.ac.babraham.trainflag.server.ui.StatusPanel.StatusCellRenderer;
 import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveyQuestionEditor;
 import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveySetTableModel;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
@@ -74,12 +73,8 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 		JTabbedPane tabPanel = new JTabbedPane();
 
 
-		JTable clientTable = new JTable(new ClientSetTableModel(clients));
-		clientTable.setFont(new Font("Arial", Font.PLAIN, 20));
-		clientTable.setRowHeight(30);
-		clientTable.getColumnModel().getColumn(2).setCellRenderer(new StatusCellRenderer());
 
-		tabPanel.add("Students", new JScrollPane(clientTable));
+		tabPanel.add("Students", new ClientSetPanel(clients));
 
 		JPanel surveysPanel = new JPanel();
 		surveysPanel.setLayout(new BorderLayout());

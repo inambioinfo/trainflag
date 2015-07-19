@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server.ui.StatusPanel;
+package uk.ac.babraham.trainflag.server.ui.ClientSetPanel;
 
 import java.awt.Color;
 import java.awt.Component;

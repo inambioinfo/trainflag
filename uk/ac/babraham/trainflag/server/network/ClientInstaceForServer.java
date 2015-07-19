@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server;
+package uk.ac.babraham.trainflag.server.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;

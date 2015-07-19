@@ -5,7 +5,6 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-import uk.ac.babraham.trainflag.server.ClientInstaceForServer;
 import uk.ac.babraham.trainflag.server.TrainFlagServer;
 
 public class BroadcastReceiver implements Runnable {
