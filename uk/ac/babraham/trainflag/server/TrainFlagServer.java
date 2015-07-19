@@ -1,43 +1,31 @@
 package uk.ac.babraham.trainflag.server;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 
 import uk.ac.babraham.trainflag.server.network.BroadcastReceiver;
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
 import uk.ac.babraham.trainflag.server.ui.ClientSetPanel.ClientSetPanel;
 import uk.ac.babraham.trainflag.server.ui.RoomPanel.RoomPanelContainer;
-import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveyQuestionEditor;
-import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveySetTableModel;
-import uk.ac.babraham.trainflag.survey.SurveyQuestion;
+import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveyPanel;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
-public class TrainFlagServer extends JFrame implements MouseListener {
+public class TrainFlagServer extends JFrame {
 
 	public static final String VERSION = "0.1.devel";
 
 	private ClientSet clients = new ClientSet();
 	private SurveySet surveys = new SurveySet();
-	private JTable surveyTable;
 	private JTextField courseName;
 
 
@@ -76,33 +64,8 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 
 		tabPanel.add("Students", new ClientSetPanel(clients));
 
-		JPanel surveysPanel = new JPanel();
-		surveysPanel.setLayout(new BorderLayout());
 
-		surveyTable = new JTable(new SurveySetTableModel(surveys));
-		surveyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		surveyTable.addMouseListener(this);
-		surveyTable.setFont(new Font("Arial", Font.PLAIN, 20));
-		surveyTable.setRowHeight(30);
-		surveysPanel.add(new JScrollPane(surveyTable),BorderLayout.CENTER);
-
-		JPanel surveyButtonPanel = new JPanel();
-		JButton newSurveyButton = new JButton("Add Survey");
-		newSurveyButton.setActionCommand("new_survey");
-		newSurveyButton.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent ae) {
-				SurveyQuestion newQuestion = new SurveyQuestion("Why is a raven like a writing desk?");
-				new SurveyQuestionEditor(newQuestion);
-				surveys.addQuestion(newQuestion);
-			}
-		});
-
-		surveyButtonPanel.add(newSurveyButton);
-
-		surveysPanel.add(surveyButtonPanel,BorderLayout.SOUTH);
-
-		tabPanel.add("Surveys", surveysPanel);
+		tabPanel.add("Surveys", new SurveyPanel(surveys));
 
 		tabPanel.add("Layout",new RoomPanelContainer(clients));
 				
@@ -130,22 +93,5 @@ public class TrainFlagServer extends JFrame implements MouseListener {
 	public String name () {
 		return courseName.getText();
 	}
-
-	public void mouseClicked(MouseEvent me) {
-		if (me.getSource() == surveyTable) {
-			// This comes from the survey table
-			if (me.getClickCount() == 2) {
-				new SurveyQuestionEditor(surveys.questions()[surveyTable.getSelectedRow()]);
-			}
-		}
-	}
-
-	public void mouseEntered(MouseEvent arg0) {}
-
-	public void mouseExited(MouseEvent arg0) {}
-
-	public void mousePressed(MouseEvent arg0) {}
-
-	public void mouseReleased(MouseEvent arg0) {}
 
 }
