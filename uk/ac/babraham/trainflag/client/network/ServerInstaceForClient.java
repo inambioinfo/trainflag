@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.client;
+package uk.ac.babraham.trainflag.client.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,6 +13,9 @@ public class ServerInstaceForClient {
 	
 	public ServerInstaceForClient (InetAddress address) {
 		this.address = address;
+		
+		// Set up a heartbeat so we can tell if the server dies.
+		new ServerHeartbeatCheck(this);
 	}
 	
 	public boolean sendCommand (String [] sections) throws IOException {

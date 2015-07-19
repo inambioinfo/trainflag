@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import uk.ac.babraham.trainflag.client.network.ClientThreadListener;
+import uk.ac.babraham.trainflag.client.network.ServerInstaceForClient;
 import uk.ac.babraham.trainflag.client.ui.BlockButton;
 import uk.ac.babraham.trainflag.resources.ColourScheme;
 import uk.ac.babraham.trainflag.server.ClientInstance;

@@ -26,6 +26,7 @@ import javax.swing.table.AbstractTableModel;
 
 import uk.ac.babraham.trainflag.client.network.ClientThread;
 import uk.ac.babraham.trainflag.client.network.ClientThreadListener;
+import uk.ac.babraham.trainflag.client.network.ServerInstaceForClient;
 import uk.ac.babraham.trainflag.client.ui.BlockButton;
 import uk.ac.babraham.trainflag.resources.ColourScheme;
 
