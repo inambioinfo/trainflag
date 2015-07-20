@@ -10,28 +10,36 @@ import java.awt.event.MouseListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
-public class SurveyPanel extends JPanel implements MouseListener, ActionListener {
+public class SurveyPanel extends JSplitPane implements MouseListener, ActionListener {
 
 	private JTable surveyTable;
 	private SurveySet surveys;
+	private SurveyQuestionPanel questionPanel;
 	
 	public SurveyPanel (SurveySet surveys) {
+		super(JSplitPane.VERTICAL_SPLIT);
 		this.surveys = surveys;
-		setLayout(new BorderLayout());
 
 		surveyTable = new JTable(new SurveySetTableModel(surveys));
 		surveyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		surveyTable.addMouseListener(this);
 		surveyTable.setFont(new Font("Arial", Font.PLAIN, 20));
 		surveyTable.setRowHeight(30);
-		add(new JScrollPane(surveyTable),BorderLayout.CENTER);
+		setTopComponent(new JScrollPane(surveyTable));
 
+		JPanel questionAndButtonPanel = new JPanel();
+		questionAndButtonPanel.setLayout(new BorderLayout());
+		
+		questionPanel = new SurveyQuestionPanel();
+		questionAndButtonPanel.add(questionPanel,BorderLayout.CENTER);
+		
 		JPanel surveyButtonPanel = new JPanel();
 		
 		JButton loadSurveysButton = new JButton("Load Surveys");
@@ -54,14 +62,16 @@ public class SurveyPanel extends JPanel implements MouseListener, ActionListener
 		askSurveyButton.addActionListener(this);
 		surveyButtonPanel.add(askSurveyButton);	
 		
-		add(surveyButtonPanel,BorderLayout.SOUTH);
+		questionAndButtonPanel.add(surveyButtonPanel,BorderLayout.SOUTH);
 
+		setBottomComponent(questionAndButtonPanel);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent me) {
 		if (me.getSource() == surveyTable) {
 			// This comes from the survey table
+			questionPanel.setQuestion(surveys.questions()[surveyTable.getSelectedRow()]);
 			if (me.getClickCount() == 2) {
 				new SurveyQuestionEditor(surveys.questions()[surveyTable.getSelectedRow()]);
 			}
