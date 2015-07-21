@@ -79,7 +79,8 @@ Function: SEND_SURVEY
 
 Action: Send a multi choice question to present on the client
 
-Additional fields: 1 + N  First field is a random survey ID (int) to be used when replying
+Additional fields: First field is a boolean (1/0) to say whether survey answers should
+                   be randomised.
                    Additional fields are the possible answers to be presented to the 
                    client.
 

@@ -6,14 +6,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
+import uk.ac.babraham.trainflag.server.ClientSet;
+import uk.ac.babraham.trainflag.server.network.ClientInstaceForServer;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
@@ -22,10 +26,12 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 	private JTable surveyTable;
 	private SurveySet surveys;
 	private SurveyQuestionPanel questionPanel;
+	private ClientSet clients;
 	
-	public SurveyPanel (SurveySet surveys) {
+	public SurveyPanel (ClientSet clients, SurveySet surveys) {
 		super(JSplitPane.VERTICAL_SPLIT);
 		this.surveys = surveys;
+		this.clients = clients;
 
 		surveyTable = new JTable(new SurveySetTableModel(surveys));
 		surveyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -104,7 +110,16 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 			// TODO: Load surveys
 		}
 		else if (ae.getActionCommand().equals("ask_survey")) {
-			// TODO: Load surveys
+			// Check if we have a survey selected
+			if (surveyTable.getSelectedRow() != -1) {
+				try {
+					ClientInstaceForServer.sendSurveyQuestion(surveys.questions()[surveyTable.getSelectedRow()], clients.addresses());
+				} 
+				catch (IOException ioe) {
+					ioe.printStackTrace();
+					JOptionPane.showMessageDialog(this, "Failed to ask survey: "+ioe.getMessage(),"Survey Failed",JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		}
 	}
 	

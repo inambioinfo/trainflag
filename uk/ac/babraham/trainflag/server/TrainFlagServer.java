@@ -65,7 +65,7 @@ public class TrainFlagServer extends JFrame {
 		tabPanel.add("Students", new ClientSetPanel(clients));
 
 
-		tabPanel.add("Surveys", new SurveyPanel(surveys));
+		tabPanel.add("Surveys", new SurveyPanel(clients,surveys));
 
 		tabPanel.add("Layout",new RoomPanelContainer(clients));
 				

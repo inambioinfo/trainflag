@@ -84,6 +84,15 @@ public class ClientSet {
 	public ClientInstance [] clients () {
 		return (clients.toArray(new ClientInstance[0]));
 	}
+	
+	public InetAddress [] addresses () {
+		ClientInstance [] clients = clients();
+		InetAddress [] addresses = new InetAddress[clients.length];
+		for (int c=0;c<clients.length;c++) {
+			addresses[c] = clients[c].address();
+		}
+		return addresses;
+	}
 
 	public int clientCount () {
 		return clients.size();
