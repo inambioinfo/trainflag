@@ -2,7 +2,7 @@ package uk.ac.babraham.trainflag.server.ui.RoomPanel;
 
 import java.net.InetAddress;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
 
 public class ClientInstanceSpace extends ClientInstance {
 

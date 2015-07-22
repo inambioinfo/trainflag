@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server;
+package uk.ac.babraham.trainflag.server.data;
 
 import java.net.InetAddress;
 import java.util.Enumeration;
@@ -10,8 +10,13 @@ public class ClientSet {
 	 * This class keeps a record of all of the connected clients
 	 */
 	
+	private TrainFlagData tfData;
+	
 	private Vector<ClientInstance> clients = new Vector<ClientInstance>();
-	private Vector<ClientSetListener>listeners = new Vector<ClientSetListener>();
+	
+	public ClientSet(TrainFlagData tfData) {
+		this.tfData = tfData;
+	}
 	
 	public boolean hasClient(InetAddress address) {
 		Enumeration<ClientInstance> en = clients.elements();
@@ -37,48 +42,44 @@ public class ClientSet {
 	
 	public void addClient (ClientInstance client) {
 		clients.add(client);
-		Enumeration<ClientSetListener> en = listeners.elements();
-		while (en.hasMoreElements()) {
-			en.nextElement().clientAdded(client);
+		TrainFlagDataListener [] ls = tfData.listeners();
+		for (int l=0;l<ls.length;l++) {
+			ls[l].clientAdded(client);
 		}
 	}
 
 	public void removeClient (ClientInstance client) {
 		clients.remove(client);
-		Enumeration<ClientSetListener> en = listeners.elements();
-		while (en.hasMoreElements()) {
-			en.nextElement().clientRemoved(client);
-		}
+		TrainFlagDataListener [] ls = tfData.listeners();
+		for (int l=0;l<ls.length;l++) {
+			ls[l].clientRemoved(client);
+		}	
 	}
 	
 	public void setClientState (ClientInstance client, int state) {
 		client.setState(state);
-		Enumeration<ClientSetListener> en = listeners.elements();
-		while (en.hasMoreElements()) {
-			en.nextElement().clientStateChanged(client, state);
-		}
+		TrainFlagDataListener [] ls = tfData.listeners();
+		for (int l=0;l<ls.length;l++) {
+			ls[l].clientStateChanged(client, state);
+		}	
 	}
 	
 
 	public void setClientName (ClientInstance client, String name) {
 		client.setStudentName(name);
-		Enumeration<ClientSetListener> en = listeners.elements();
-		while (en.hasMoreElements()) {
-			en.nextElement().clientNameChanged(client, name);
-		}
+		TrainFlagDataListener [] ls = tfData.listeners();
+		for (int l=0;l<ls.length;l++) {
+			ls[l].clientNameChanged(client, name);
+		}		
 	}
 
 	
-	public void addClientSetListener (ClientSetListener l) {
-		if (l != null && ! listeners.contains(l)) {
-			listeners.add(l);
-		}
+	public void addTrainFlagDataListener (TrainFlagDataListener l) {
+		tfData.addTrainFlagDataListener(l);
 	}
 	
-	public void removeClientSetListener (ClientSetListener l) {
-		if (l != null && listeners.contains(l)) {
-			listeners.remove(l);
-		}
+	public void removeTrainFlagDataListener (TrainFlagDataListener l) {
+		tfData.removeTrainFlagDataListener(l);
 	}
 	
 	public ClientInstance [] clients () {

@@ -8,16 +8,17 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
-import uk.ac.babraham.trainflag.server.ClientSet;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientSet;
+import uk.ac.babraham.trainflag.server.data.TrainFlagData;
 
 public class ServerThread implements Runnable {
 
-	private ClientSet clients;
+	private TrainFlagData tfData;
 	private ServerSocket m_ServerSocket;
 	
-	public ServerThread (ClientSet clients) throws IOException {
-		this.clients = clients;
+	public ServerThread (TrainFlagData tfData) throws IOException {
+		this.tfData = tfData;
 		
 		m_ServerSocket = new ServerSocket(9925);
 		
@@ -70,8 +71,8 @@ public class ServerThread implements Runnable {
 					// Check to see if this client has already registered and add them if not
 					// If they are already registered then assume they just died on the client
 					// end and restarted.
-					if (!clients.hasClient(ci.address())) {
-						clients.addClient(ci);
+					if (!tfData.clients().hasClient(ci.address())) {
+						tfData.clients().addClient(ci);
 					}
 										
 					out.println("SUCCESS");
@@ -81,8 +82,8 @@ public class ServerThread implements Runnable {
 				else if (commandSections[0].equals("DEREGISTER")) {
 					// We need to remove this client from the list of clients
 
-					if (clients.hasClient(clientSocket.getInetAddress())) {
-						clients.removeClient(clients.getClient(clientSocket.getInetAddress()));
+					if (tfData.clients().hasClient(clientSocket.getInetAddress())) {
+						tfData.clients().removeClient(tfData.clients().getClient(clientSocket.getInetAddress()));
 					}
 					
 					out.println("SUCCESS");
@@ -99,14 +100,14 @@ public class ServerThread implements Runnable {
 
 					// We need to change the state of this client
 
-					if (clients.hasClient(clientSocket.getInetAddress())) {
+					if (tfData.clients().hasClient(clientSocket.getInetAddress())) {
 						try {
 							int newState = Integer.parseInt(commandSections[1]);
 							if (! ClientInstance.isValidState(newState)) {
 								out.println("INVALID STATE "+newState);
 							}
 							else {
-								clients.setClientState(clients.getClient(clientSocket.getInetAddress()),newState);
+								tfData.clients().setClientState(tfData.clients().getClient(clientSocket.getInetAddress()),newState);
 								out.println("SUCCESS");
 								
 							}
@@ -126,8 +127,8 @@ public class ServerThread implements Runnable {
 
 					// We need to change the name of this client
 
-					if (clients.hasClient(clientSocket.getInetAddress())) {
-						clients.setClientName(clients.getClient(clientSocket.getInetAddress()),commandSections[1]);
+					if (tfData.clients().hasClient(clientSocket.getInetAddress())) {
+						tfData.clients().setClientName(tfData.clients().getClient(clientSocket.getInetAddress()),commandSections[1]);
 						out.println("SUCCESS");
 					}
 					else {

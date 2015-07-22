@@ -16,24 +16,21 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
-import uk.ac.babraham.trainflag.server.ClientSet;
+import uk.ac.babraham.trainflag.server.data.TrainFlagData;
 import uk.ac.babraham.trainflag.server.network.ClientInstaceForServer;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
-import uk.ac.babraham.trainflag.survey.SurveySet;
 
 public class SurveyPanel extends JSplitPane implements MouseListener, ActionListener {
 
 	private JTable surveyTable;
-	private SurveySet surveys;
 	private SurveyQuestionPanel questionPanel;
-	private ClientSet clients;
+	private TrainFlagData tfData;
 	
-	public SurveyPanel (ClientSet clients, SurveySet surveys) {
+	public SurveyPanel (TrainFlagData tfData) {
 		super(JSplitPane.VERTICAL_SPLIT);
-		this.surveys = surveys;
-		this.clients = clients;
+		this.tfData = tfData;
 
-		surveyTable = new JTable(new SurveySetTableModel(surveys));
+		surveyTable = new JTable(new SurveySetTableModel(tfData.surveys()));
 		surveyTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		surveyTable.addMouseListener(this);
 		surveyTable.setFont(new Font("Arial", Font.PLAIN, 20));
@@ -77,9 +74,9 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 	public void mouseClicked(MouseEvent me) {
 		if (me.getSource() == surveyTable) {
 			// This comes from the survey table
-			questionPanel.setQuestion(surveys.questions()[surveyTable.getSelectedRow()]);
+			questionPanel.setQuestion(tfData.surveys().questions()[surveyTable.getSelectedRow()]);
 			if (me.getClickCount() == 2) {
-				new SurveyQuestionEditor(surveys.questions()[surveyTable.getSelectedRow()]);
+				new SurveyQuestionEditor(tfData.surveys().questions()[surveyTable.getSelectedRow()]);
 			}
 		}
 	}
@@ -101,7 +98,7 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 		if (ae.getActionCommand().equals("new_survey")) {
 			SurveyQuestion newQuestion = new SurveyQuestion("Why is a raven like a writing desk?");
 			new SurveyQuestionEditor(newQuestion);
-			SurveyPanel.this.surveys.addQuestion(newQuestion);
+			SurveyPanel.this.tfData.surveys().addQuestion(newQuestion);
 		}
 		else if (ae.getActionCommand().equals("load_surveys")) {
 			// TODO: Load surveys
@@ -113,7 +110,7 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 			// Check if we have a survey selected
 			if (surveyTable.getSelectedRow() != -1) {
 				try {
-					ClientInstaceForServer.sendSurveyQuestion(surveys.questions()[surveyTable.getSelectedRow()], clients.addresses());
+					ClientInstaceForServer.sendSurveyQuestion(tfData.surveys().questions()[surveyTable.getSelectedRow()], tfData.clients().addresses());
 				} 
 				catch (IOException ioe) {
 					ioe.printStackTrace();

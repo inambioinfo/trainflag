@@ -1,40 +1,43 @@
 package uk.ac.babraham.trainflag.survey;
 
-import java.util.Enumeration;
 import java.util.Vector;
+
+import uk.ac.babraham.trainflag.server.data.TrainFlagData;
+import uk.ac.babraham.trainflag.server.data.TrainFlagDataListener;
 
 public class SurveySet {
 
-	private Vector<SurveySetListener> listeners = new Vector<SurveySetListener>();
 	private Vector<SurveyQuestion> questions = new Vector<SurveyQuestion>();
 	
+	private TrainFlagData tfData;
 	
-	public void addSurveySetListener (SurveySetListener l) {
-		if (l != null && ! listeners.contains(l)) {
-			listeners.add(l);
-		}
+	public SurveySet (TrainFlagData tfData) {
+		this.tfData = tfData;
 	}
 	
-	public void removeSurveySetListener (SurveySetListener l) {
-		if (l != null && listeners.contains(l)) {
-			listeners.remove(l);
-		}
+	
+	public void addSurveySetListener (TrainFlagDataListener l) {
+		tfData.addTrainFlagDataListener(l);
+	}
+	
+	public void removeSurveySetListener (TrainFlagDataListener l) {
+		tfData.removeTrainFlagDataListener(l);
 	}
 	
 	public void addQuestion (SurveyQuestion question) {
 		questions.add(question);
-		Enumeration<SurveySetListener> en = listeners.elements();
-		while (en.hasMoreElements()) {
-			en.nextElement().questionAdded(question);
+		TrainFlagDataListener [] ls = tfData.listeners();
+		for (int l=0;l<ls.length;l++) {
+			ls[l].questionAdded(question);
 		}
 	}
 
 	public void removeQuestion (SurveyQuestion question) {
 		if (questions.contains(question)) {
 			questions.remove(question);
-			Enumeration<SurveySetListener> en = listeners.elements();
-			while (en.hasMoreElements()) {
-				en.nextElement().questionRemoved(question);
+			TrainFlagDataListener [] ls = tfData.listeners();
+			for (int l=0;l<ls.length;l++) {
+				ls[l].questionRemoved(question);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package uk.ac.babraham.trainflag.server;
+package uk.ac.babraham.trainflag.server.data;
 
 import java.net.InetAddress;
 

@@ -3,8 +3,8 @@ package uk.ac.babraham.trainflag.server.network;
 import java.io.IOException;
 import java.net.InetAddress;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
-import uk.ac.babraham.trainflag.server.ClientSet;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientSet;
 
 public class ClientHeartbeatCheck implements Runnable {
 

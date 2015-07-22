@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileFilter;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
-import uk.ac.babraham.trainflag.server.ClientSet;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientSet;
 import uk.ac.babraham.trainflag.server.network.IPtoByteConverter;
 
 public class RoomPanelContainer extends JPanel implements ActionListener {

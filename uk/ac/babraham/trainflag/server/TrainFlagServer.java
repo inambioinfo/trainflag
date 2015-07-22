@@ -12,20 +12,19 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
+import uk.ac.babraham.trainflag.server.data.TrainFlagData;
 import uk.ac.babraham.trainflag.server.network.BroadcastReceiver;
 import uk.ac.babraham.trainflag.server.network.ServerThread;
 import uk.ac.babraham.trainflag.server.ui.AboutPanel;
 import uk.ac.babraham.trainflag.server.ui.ClientSetPanel.ClientSetPanel;
 import uk.ac.babraham.trainflag.server.ui.RoomPanel.RoomPanelContainer;
 import uk.ac.babraham.trainflag.server.ui.SurveyPanel.SurveyPanel;
-import uk.ac.babraham.trainflag.survey.SurveySet;
 
 public class TrainFlagServer extends JFrame {
 
 	public static final String VERSION = "0.1.devel";
 
-	private ClientSet clients = new ClientSet();
-	private SurveySet surveys = new SurveySet();
+	private TrainFlagData tfData = new TrainFlagData();
 	private JTextField courseName;
 
 
@@ -37,7 +36,7 @@ public class TrainFlagServer extends JFrame {
 		// Create the server thread which is going to do the processing of
 		// incoming connections
 		try {
-			new ServerThread(clients);
+			new ServerThread(tfData);
 		}
 		catch (IOException ioe) {
 			// We can't start the network thread so we might as well give up now
@@ -62,12 +61,12 @@ public class TrainFlagServer extends JFrame {
 
 
 
-		tabPanel.add("Students", new ClientSetPanel(clients));
+		tabPanel.add("Students", new ClientSetPanel(tfData.clients()));
 
 
-		tabPanel.add("Surveys", new SurveyPanel(clients,surveys));
+		tabPanel.add("Surveys", new SurveyPanel(tfData));
 
-		tabPanel.add("Layout",new RoomPanelContainer(clients));
+		tabPanel.add("Layout",new RoomPanelContainer(tfData.clients()));
 				
 		JPanel aboutContainer = new JPanel();
 		aboutContainer.setLayout(new BorderLayout());

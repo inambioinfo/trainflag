@@ -2,7 +2,7 @@ package uk.ac.babraham.trainflag.resources;
 
 import java.awt.Color;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
 
 public class ColourScheme {
 	

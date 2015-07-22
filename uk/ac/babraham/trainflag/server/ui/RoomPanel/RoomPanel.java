@@ -11,11 +11,13 @@ import java.net.UnknownHostException;
 import javax.swing.JPanel;
 
 import uk.ac.babraham.trainflag.resources.ColourScheme;
-import uk.ac.babraham.trainflag.server.ClientInstance;
-import uk.ac.babraham.trainflag.server.ClientSet;
-import uk.ac.babraham.trainflag.server.ClientSetListener;;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientSet;
+import uk.ac.babraham.trainflag.server.data.TrainFlagDataListener;
+import uk.ac.babraham.trainflag.survey.SurveyAnswer;
+import uk.ac.babraham.trainflag.survey.SurveyQuestion;;
 
-public class RoomPanel extends JPanel implements ClientSetListener, MouseListener, MouseMotionListener {
+public class RoomPanel extends JPanel implements TrainFlagDataListener, MouseListener, MouseMotionListener {
 
 	private ClientSet clients;
 	private TrainerInstance trainer;
@@ -31,7 +33,7 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 	
 	public RoomPanel (ClientSet clients) {
 		this.clients = clients;
-		clients.addClientSetListener(this);
+		clients.addTrainFlagDataListener(this);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 		
@@ -254,6 +256,36 @@ public class RoomPanel extends JPanel implements ClientSetListener, MouseListene
 		
 	}
 	
+	@Override
+	public void questionAdded(SurveyQuestion question) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void questionRemoved(SurveyQuestion question) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void answerAdded(SurveyQuestion question, SurveyAnswer answer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void answerRemoved(SurveyQuestion question, SurveyAnswer answer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void questionChanged(SurveyQuestion question) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	private class TrainerInstance extends ClientInstance {
 		
 		public TrainerInstance () throws UnknownHostException  {

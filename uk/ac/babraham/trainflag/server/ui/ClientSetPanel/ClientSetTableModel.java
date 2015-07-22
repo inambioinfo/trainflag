@@ -3,17 +3,19 @@ package uk.ac.babraham.trainflag.server.ui.ClientSetPanel;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
-import uk.ac.babraham.trainflag.server.ClientSet;
-import uk.ac.babraham.trainflag.server.ClientSetListener;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientSet;
+import uk.ac.babraham.trainflag.server.data.TrainFlagDataListener;
+import uk.ac.babraham.trainflag.survey.SurveyAnswer;
+import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 
-public class ClientSetTableModel extends AbstractTableModel implements ClientSetListener {
+public class ClientSetTableModel extends AbstractTableModel implements TrainFlagDataListener {
 	
 	private ClientSet clients;
 	
 	public ClientSetTableModel (ClientSet clients) {
 		this.clients = clients;
-		clients.addClientSetListener(this);
+		clients.addTrainFlagDataListener(this);
 	}
 
 	public int getColumnCount() {
@@ -62,6 +64,36 @@ public class ClientSetTableModel extends AbstractTableModel implements ClientSet
 
 	public void clientNameChanged(ClientInstance client, String name) {
 		fireTableDataChanged();		
+	}
+
+	@Override
+	public void questionAdded(SurveyQuestion question) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void questionRemoved(SurveyQuestion question) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void answerAdded(SurveyQuestion question, SurveyAnswer answer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void answerRemoved(SurveyQuestion question, SurveyAnswer answer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void questionChanged(SurveyQuestion question) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

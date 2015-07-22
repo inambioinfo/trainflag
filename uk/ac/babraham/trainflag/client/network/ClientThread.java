@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import uk.ac.babraham.trainflag.server.ClientInstance;
+import uk.ac.babraham.trainflag.server.data.ClientInstance;
 
 public class ClientThread implements Runnable {
 
