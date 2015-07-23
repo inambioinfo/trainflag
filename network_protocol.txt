@@ -94,8 +94,7 @@ Function: ANSWER_SURVEY
 
 Action: Answer a previously distributed survey
 
-Additional fields: 2 fields.  Field 1 is the random survey ID (int) provided when the survey was sent.
-                              Field 2 is the answer, and is a zero based int of the index position of the selected answer
+Additional fields: 1 field,  the answer, and is a zero based int of the index position of the selected answer
 
 Extended data : No
 

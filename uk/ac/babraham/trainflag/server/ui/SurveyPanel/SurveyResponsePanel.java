@@ -125,9 +125,21 @@ public class SurveyResponsePanel extends JPanel implements TrainFlagDataListener
 	}
 
 	@Override
-	public void questionChanged(SurveyQuestion question) {
+	public void surveyStarted(SurveyResponseSet responseSet) {
 		// TODO Auto-generated method stub
+		
+	}
 
+	@Override
+	public void answerReceived(SurveyResponseSet responseSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void surveyEnded(SurveyResponseSet responseSet) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

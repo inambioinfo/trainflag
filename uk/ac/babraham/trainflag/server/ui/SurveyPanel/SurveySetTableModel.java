@@ -6,6 +6,7 @@ import uk.ac.babraham.trainflag.server.data.ClientInstance;
 import uk.ac.babraham.trainflag.server.data.TrainFlagDataListener;
 import uk.ac.babraham.trainflag.survey.SurveyAnswer;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
+import uk.ac.babraham.trainflag.survey.SurveyResponseSet;
 import uk.ac.babraham.trainflag.survey.SurveySet;
 
 public class SurveySetTableModel extends AbstractTableModel implements TrainFlagDataListener {
@@ -62,10 +63,6 @@ public class SurveySetTableModel extends AbstractTableModel implements TrainFlag
 		fireTableDataChanged();
 	}
 
-	public void questionChanged(SurveyQuestion question) {
-		fireTableDataChanged();
-	}
-
 	@Override
 	public void clientAdded(ClientInstance client) {
 		// TODO Auto-generated method stub
@@ -86,6 +83,24 @@ public class SurveySetTableModel extends AbstractTableModel implements TrainFlag
 
 	@Override
 	public void clientNameChanged(ClientInstance client, String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void surveyStarted(SurveyResponseSet responseSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void answerReceived(SurveyResponseSet responseSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void surveyEnded(SurveyResponseSet responseSet) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -15,7 +15,8 @@ import uk.ac.babraham.trainflag.server.data.ClientInstance;
 import uk.ac.babraham.trainflag.server.data.ClientSet;
 import uk.ac.babraham.trainflag.server.data.TrainFlagDataListener;
 import uk.ac.babraham.trainflag.survey.SurveyAnswer;
-import uk.ac.babraham.trainflag.survey.SurveyQuestion;;
+import uk.ac.babraham.trainflag.survey.SurveyQuestion;
+import uk.ac.babraham.trainflag.survey.SurveyResponseSet;;
 
 public class RoomPanel extends JPanel implements TrainFlagDataListener, MouseListener, MouseMotionListener {
 
@@ -280,11 +281,25 @@ public class RoomPanel extends JPanel implements TrainFlagDataListener, MouseLis
 		
 	}
 
+
 	@Override
-	public void questionChanged(SurveyQuestion question) {
+	public void surveyStarted(SurveyResponseSet responseSet) {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void answerReceived(SurveyResponseSet responseSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void surveyEnded(SurveyResponseSet responseSet) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	private class TrainerInstance extends ClientInstance {
 		

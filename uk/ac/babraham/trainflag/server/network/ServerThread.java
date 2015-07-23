@@ -9,13 +9,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import uk.ac.babraham.trainflag.server.data.ClientInstance;
-import uk.ac.babraham.trainflag.server.data.ClientSet;
 import uk.ac.babraham.trainflag.server.data.TrainFlagData;
+import uk.ac.babraham.trainflag.server.data.TrainFlagDataListener;
+import uk.ac.babraham.trainflag.survey.SurveyAnswer;
+import uk.ac.babraham.trainflag.survey.SurveyQuestion;
+import uk.ac.babraham.trainflag.survey.SurveyResponseSet;
 
-public class ServerThread implements Runnable {
+public class ServerThread implements Runnable, TrainFlagDataListener {
 
 	private TrainFlagData tfData;
 	private ServerSocket m_ServerSocket;
+	private SurveyResponseSet surveyResponseSet = null;
 	
 	public ServerThread (TrainFlagData tfData) throws IOException {
 		this.tfData = tfData;
@@ -88,6 +92,24 @@ public class ServerThread implements Runnable {
 					
 					out.println("SUCCESS");
 				}
+				
+				else if (commandSections[0].equals("ANSWER_SURVEY")) {
+					// Add this response to the survey response set
+					
+					if (surveyResponseSet != null) {				
+						if (tfData.clients().hasClient(clientSocket.getInetAddress())) {
+							surveyResponseSet.addResponse(tfData.clients().getClient(clientSocket.getInetAddress()), Integer.parseInt(commandSections[1]));
+							out.println("SUCCESS");
+						}
+						else {
+							out.println("ERROR_UNKNOWN_CLIENT");
+						}
+					}
+					else {
+						out.println("ERROR_NO_ACTIVE_SURVEY");
+						
+					}
+				}
 
 				
 				else if (commandSections[0].equals("PING")) {
@@ -152,6 +174,26 @@ public class ServerThread implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+
+
+	public void clientAdded(ClientInstance client) {}
+	public void clientRemoved(ClientInstance client) {}
+	public void clientStateChanged(ClientInstance client, int status) {}
+	public void clientNameChanged(ClientInstance client, String name) {}
+	public void questionAdded(SurveyQuestion question) {}
+	public void questionRemoved(SurveyQuestion question) {}
+	public void answerAdded(SurveyQuestion question, SurveyAnswer answer) {}
+	public void answerRemoved(SurveyQuestion question, SurveyAnswer answer) {}
+
+	public void surveyStarted(SurveyResponseSet responseSet) {
+		this.surveyResponseSet = responseSet;
+	}
+
+	public void answerReceived(SurveyResponseSet responseSet) {}
+
+	public void surveyEnded(SurveyResponseSet responseSet) {
+		surveyResponseSet = null;
 	}
 
 }

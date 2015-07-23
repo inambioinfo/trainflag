@@ -2,6 +2,7 @@ package uk.ac.babraham.trainflag.server.data;
 
 import uk.ac.babraham.trainflag.survey.SurveyAnswer;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
+import uk.ac.babraham.trainflag.survey.SurveyResponseSet;
 
 public interface TrainFlagDataListener {
 
@@ -13,7 +14,10 @@ public interface TrainFlagDataListener {
 	public void questionRemoved (SurveyQuestion question);
 	public void answerAdded (SurveyQuestion question, SurveyAnswer answer);
 	public void answerRemoved (SurveyQuestion question, SurveyAnswer answer);
-	public void questionChanged (SurveyQuestion question);
+	public void surveyStarted (SurveyResponseSet responseSet);
+	public void answerReceived (SurveyResponseSet responseSet);
+	public void surveyEnded (SurveyResponseSet responseSet);
+	
 
 	
 	
