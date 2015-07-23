@@ -8,7 +8,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 import uk.ac.babraham.trainflag.survey.SurveyAnswer;
-import uk.ac.babraham.trainflag.survey.SurveyQuestion;
+import uk.ac.babraham.trainflag.survey.SurveyResponseSet;
 
 public class ClientInstaceForServer {
 
@@ -50,20 +50,20 @@ public class ClientInstaceForServer {
 		return returnValues;
 	}
 
-	public static boolean [] sendSurveyQuestion (SurveyQuestion question, InetAddress [] addresses) throws IOException {
-		boolean [] returnValues = new boolean [addresses.length];
+	public static boolean [] sendSurveyQuestion (SurveyResponseSet survey) throws IOException {
+		boolean [] returnValues = new boolean [survey.clients().clients().length];
 
 		StringBuffer initialCommand = new StringBuffer();
 
 		initialCommand.append("SEND_SURVEY\t");
-		if (question.randomise()) {
+		if (survey.question().randomise()) {
 			initialCommand.append("1");
 		}
 		else {
 			initialCommand.append("0");
 		}
 
-		SurveyAnswer [] answers = question.answers();
+		SurveyAnswer [] answers = survey.question().answers();
 
 		for (int a=0;a<answers.length;a++) {
 			initialCommand.append("\t");
@@ -72,9 +72,9 @@ public class ClientInstaceForServer {
 
 		// Now we can send the command
 
-		for (int a=0;a<addresses.length;a++) {
+		for (int a=0;a<survey.clients().addresses().length;a++) {
 
-			InetAddress address = addresses[a];
+			InetAddress address = survey.clients().addresses()[a];
 
 			Socket socket = new Socket(address,9926);
 
@@ -83,7 +83,7 @@ public class ClientInstaceForServer {
 			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
 			out.println(initialCommand.toString());
-			out.println(question.text());
+			out.println(survey.question().text());
 			out.println("##END");
 			out.flush();
 

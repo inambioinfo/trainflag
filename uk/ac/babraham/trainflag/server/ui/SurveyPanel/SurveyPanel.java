@@ -6,10 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -17,13 +15,12 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 
 import uk.ac.babraham.trainflag.server.data.TrainFlagData;
-import uk.ac.babraham.trainflag.server.network.ClientInstaceForServer;
 import uk.ac.babraham.trainflag.survey.SurveyQuestion;
 
 public class SurveyPanel extends JSplitPane implements MouseListener, ActionListener {
 
 	private JTable surveyTable;
-	private SurveyQuestionPanel questionPanel;
+	private SurveyResponsePanel questionPanel;
 	private TrainFlagData tfData;
 	
 	public SurveyPanel (TrainFlagData tfData) {
@@ -40,7 +37,7 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 		JPanel questionAndButtonPanel = new JPanel();
 		questionAndButtonPanel.setLayout(new BorderLayout());
 		
-		questionPanel = new SurveyQuestionPanel();
+		questionPanel = new SurveyResponsePanel(tfData);
 		questionAndButtonPanel.add(questionPanel,BorderLayout.CENTER);
 		
 		JPanel surveyButtonPanel = new JPanel();
@@ -59,12 +56,7 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 		newSurveyButton.setActionCommand("new_survey");
 		newSurveyButton.addActionListener(this);
 		surveyButtonPanel.add(newSurveyButton);
-		
-		JButton askSurveyButton = new JButton("Ask Survey");
-		askSurveyButton.setActionCommand("ask_survey");
-		askSurveyButton.addActionListener(this);
-		surveyButtonPanel.add(askSurveyButton);	
-		
+				
 		questionAndButtonPanel.add(surveyButtonPanel,BorderLayout.SOUTH);
 
 		setBottomComponent(questionAndButtonPanel);
@@ -105,18 +97,6 @@ public class SurveyPanel extends JSplitPane implements MouseListener, ActionList
 		}
 		else if (ae.getActionCommand().equals("save_surveys")) {
 			// TODO: Load surveys
-		}
-		else if (ae.getActionCommand().equals("ask_survey")) {
-			// Check if we have a survey selected
-			if (surveyTable.getSelectedRow() != -1) {
-				try {
-					ClientInstaceForServer.sendSurveyQuestion(tfData.surveys().questions()[surveyTable.getSelectedRow()], tfData.clients().addresses());
-				} 
-				catch (IOException ioe) {
-					ioe.printStackTrace();
-					JOptionPane.showMessageDialog(this, "Failed to ask survey: "+ioe.getMessage(),"Survey Failed",JOptionPane.ERROR_MESSAGE);
-				}
-			}
 		}
 	}
 	
