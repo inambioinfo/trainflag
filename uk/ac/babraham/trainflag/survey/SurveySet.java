@@ -66,8 +66,11 @@ public class SurveySet {
 			
 			SurveyAnswer [] answers = q.answers();
 			
-			// We first print the question.  The first line is the number of answers followed by the question text
-			pr.println(""+answers.length+"\t"+q.text());
+			// We first print the question.  The first line is the number of answers followed by 
+			// a 1/0 value for whether to randomise, followed by the question text
+			int randomise = 0;
+			if (q.randomise()) randomise = 1;
+			pr.println(""+answers.length+"\t"+randomise+"\t"+q.text());
 			
 			for (int a=0;a<answers.length;a++) {
 				pr.println(""+answers[a].answerType()+"\t"+answers[a].text());
@@ -90,13 +93,16 @@ public class SurveySet {
 			
 			// First line is the number of answers and the question
 			String [] questionSections = line.split("\t");
-			if (questionSections.length != 2) {
+			if (questionSections.length != 3) {
 				throw new IOException("Wrong number of sections in question line '"+line+"'");
 			}
 			
 			int numberOfAnswers = Integer.parseInt(questionSections[0]);
+			boolean randomise = false;
+			if (questionSections[1].equals("1")) randomise = true;
 
-			SurveyQuestion question = new SurveyQuestion(questionSections[1]);
+			SurveyQuestion question = new SurveyQuestion(questionSections[2]);
+			question.setRandomise(randomise);
 			
 			for (int a=0;a<numberOfAnswers;a++) {
 				line = br.readLine();
@@ -113,13 +119,10 @@ public class SurveySet {
 				question.addAnswer(answer);
 			}
 			
-			addQuestion(question);
-			
-			br.close();
-			
+			addQuestion(question);			
 		}
 		
-		
+		br.close();
 	}
 	
 }
