@@ -29,6 +29,8 @@ public class BroadcastReceiver implements Runnable {
 				DatagramPacket packet = new DatagramPacket(receiveBuffer, receiveBuffer.length);
 				socket.receive(packet);
 				
+				System.err.println("Saw broadcast from "+packet.getAddress().getHostAddress());
+				
 				// We'll try writing back to the client who sent us that message
 				//TODO: Add something to make the name unique (time server was started for example)
 				ClientInstaceForServer.sendCommand(new String [] {"SERVER", tfServer.name()}, new InetAddress[] {packet.getAddress()});
